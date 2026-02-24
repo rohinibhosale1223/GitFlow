@@ -1,0 +1,49 @@
+# Workflow name shown in GitHub Actions tab
+name: Jekyll site CI
+
+# Events that trigger this workflow
+on:
+  # Run workflow when code is pushed to main branch
+  push:
+    branches: [ "main" ]
+
+  # Also run workflow when a Pull Request targets main branch
+  pull_request:
+    branches: [ "main" ]
+
+# Jobs section (workflow can have multiple jobs)
+jobs:
+  build:   # Job ID (build process)
+
+    # Virtual machine used to run workflow
+    runs-on: ubuntu-latest
+
+    # Steps executed one-by-one inside the runner
+    steps:
+
+    # Step 1: Download repository code into runner
+    - uses: actions/checkout@v4
+
+    # Step 2: Build Jekyll website using Docker container
+    - name: Build the site in the jekyll/builder container
+      run: |
+        # Run Docker container for Jekyll build environment
+        docker run \
+
+        # Mount GitHub workspace folder into container
+        -v ${{ github.workspace }}:/srv/jekyll \
+
+        # Mount output folder (_site) for generated website files
+        -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
+
+        # Use official Jekyll builder image
+        jekyll/builder:latest \
+
+        # Execute commands inside container
+        /bin/bash -c "
+          # Give full permissions to avoid build permission errors
+          chmod -R 777 /srv/jekyll &&
+
+          # Build Jekyll site including future-dated posts
+          jekyll build --future
+        
