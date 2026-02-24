@@ -118,6 +118,11 @@
         let [a, b] = getValues();
         document.getElementById("result").innerText = Math.pow(a, b);
       }
+
+      function updateVersion() {
+        const versionElement = document.querySelector("h2:nth-child(2)");
+        versionElement.innerText = "Simple Calculator - version 1.2.2";
+      }
     </script>
   </body>
 </html>
