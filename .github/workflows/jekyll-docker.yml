@@ -1,73 +1,36 @@
-# ============================================================
-# Workflow Name: Appears in the GitHub Actions UI
-# This workflow performs Continuous Integration (CI)
-# for a Jekyll-based static website
-# ============================================================
-name: Jekyll site CI
+# This is a basic workflow to help you get started with Actions
 
-# ============================================================
-# Workflow Triggers
-# Defines when this pipeline should run
-# ============================================================
+name: CI
+
+# Controls when the workflow will run
 on:
-  # Trigger the workflow on every push to the main branch
+  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
-
-  # Trigger the workflow on pull requests targeting main
-  # Ensures validation before merging changes
   pull_request:
     branches: [ "main" ]
 
-# ============================================================
-# Jobs Section
-# A workflow can have multiple jobs; this one has a single job
-# ============================================================
-jobs:
-  build:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
-    # --------------------------------------------------------
-    # Runner Environment
-    # Uses the latest Ubuntu virtual machine provided by GitHub
-    # --------------------------------------------------------
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # --------------------------------------------------------
-    # Steps define the sequential actions inside this job
-    # --------------------------------------------------------
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
 
-    # --------------------------------------------------------
-    # Step 1: Checkout the source code from the repository
-    # Required so the runner can access project files
-    # --------------------------------------------------------
-    - uses: actions/checkout@v4
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
 
-    # --------------------------------------------------------
-    # Step 2: Build the Jekyll site using a Docker container
-    # Docker ensures a consistent, reproducible build environment
-    # --------------------------------------------------------
-    - name: Build the site in the jekyll/builder container
-      run: |
-        # Run the official Jekyll builder Docker image
-        docker run \
-        
-        # Mount the GitHub workspace into the container
-        # /srv/jekyll is the default working directory for Jekyll
-        -v ${{ github.workspace }}:/srv/jekyll \
-        
-        # Mount the output directory (_site) so build artifacts persist
-        -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        
-        # Use the latest official Jekyll builder image
-        jekyll/builder:latest \
-        
-        # Execute commands inside the container
-        /bin/bash -c "
-          # Fix file permission issues between host and container
-          chmod -R 777 /srv/jekyll &&
-
-          # Build the Jekyll site
-          # --future allows posts with future dates
-          jekyll build --future
-        "
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
