@@ -46,7 +46,9 @@
     <button onclick="multiply()">Multiply</button>
     <button onclick="divide()">Divide</button>
     <button onclick="squareRoot()">Square Root</button>
+    <button onclick="cubeRoot()">Cube Root</button>
     <button onclick="power()">Power</button>
+    
     <h3>Result: <span id="result">0</span></h3>
 
     <script>
@@ -89,6 +91,15 @@
           document.getElementById("result").innerText = Math.sqrt(a);
         }
       }
+      function cubeRoot() {
+    let a = parseFloat(document.getElementById("num1").value);
+
+    if (isNaN(a)) {
+        document.getElementById("result").innerText = "Enter a valid number";
+    } else {
+        document.getElementById("result").innerText = Math.cbrt(a);
+    }
+}
 
       function power() {
         let [a, b] = getValues();
