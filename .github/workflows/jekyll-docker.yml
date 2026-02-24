@@ -1,49 +1,73 @@
-# Workflow name shown in GitHub Actions tab
+# ============================================================
+# Workflow Name: Appears in the GitHub Actions UI
+# This workflow performs Continuous Integration (CI)
+# for a Jekyll-based static website
+# ============================================================
 name: Jekyll site CI
 
-# Events that trigger this workflow
+# ============================================================
+# Workflow Triggers
+# Defines when this pipeline should run
+# ============================================================
 on:
-  # Run workflow when code is pushed to main branch
+  # Trigger the workflow on every push to the main branch
   push:
     branches: [ "main" ]
 
-  # Also run workflow when a Pull Request targets main branch
+  # Trigger the workflow on pull requests targeting main
+  # Ensures validation before merging changes
   pull_request:
     branches: [ "main" ]
 
-# Jobs section (workflow can have multiple jobs)
+# ============================================================
+# Jobs Section
+# A workflow can have multiple jobs; this one has a single job
+# ============================================================
 jobs:
-  build:   # Job ID (build process)
+  build:
 
-    # Virtual machine used to run workflow
+    # --------------------------------------------------------
+    # Runner Environment
+    # Uses the latest Ubuntu virtual machine provided by GitHub
+    # --------------------------------------------------------
     runs-on: ubuntu-latest
 
-    # Steps executed one-by-one inside the runner
+    # --------------------------------------------------------
+    # Steps define the sequential actions inside this job
+    # --------------------------------------------------------
     steps:
 
-    # Step 1: Download repository code into runner
+    # --------------------------------------------------------
+    # Step 1: Checkout the source code from the repository
+    # Required so the runner can access project files
+    # --------------------------------------------------------
     - uses: actions/checkout@v4
 
-    # Step 2: Build Jekyll website using Docker container
+    # --------------------------------------------------------
+    # Step 2: Build the Jekyll site using a Docker container
+    # Docker ensures a consistent, reproducible build environment
+    # --------------------------------------------------------
     - name: Build the site in the jekyll/builder container
       run: |
-        # Run Docker container for Jekyll build environment
+        # Run the official Jekyll builder Docker image
         docker run \
-
-        # Mount GitHub workspace folder into container
+        
+        # Mount the GitHub workspace into the container
+        # /srv/jekyll is the default working directory for Jekyll
         -v ${{ github.workspace }}:/srv/jekyll \
-
-        # Mount output folder (_site) for generated website files
+        
+        # Mount the output directory (_site) so build artifacts persist
         -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-
-        # Use official Jekyll builder image
+        
+        # Use the latest official Jekyll builder image
         jekyll/builder:latest \
-
-        # Execute commands inside container
+        
+        # Execute commands inside the container
         /bin/bash -c "
-          # Give full permissions to avoid build permission errors
+          # Fix file permission issues between host and container
           chmod -R 777 /srv/jekyll &&
 
-          # Build Jekyll site including future-dated posts
+          # Build the Jekyll site
+          # --future allows posts with future dates
           jekyll build --future
-        
+        "
