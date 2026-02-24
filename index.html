@@ -46,7 +46,7 @@
     <button onclick="subtract()">Subtract</button>
     <button onclick="multiply()">Multiply</button>
     <button onclick="divide()">Divide</button>
-
+    <button onclick="squareRoot()">Square Root</button>
     <h3>Result: <span id="result">0</span></h3>
 
     <script>
@@ -77,6 +77,16 @@
                 document.getElementById("result").innerText = "Cannot divide by zero";
             } else {
                 document.getElementById("result").innerText = a / b;
+            }
+        }
+
+        function squareRoot() {
+            let a = parseFloat(document.getElementById("num1").value);
+
+            if (a < 0) {
+                document.getElementById("result").innerText = "Invalid input";
+            } else {
+                document.getElementById("result").innerText = Math.sqrt(a);
             }
         }
     </script>
