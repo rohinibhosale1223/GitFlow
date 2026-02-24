@@ -47,6 +47,7 @@
     <button onclick="multiply()">Multiply</button>
     <button onclick="divide()">Divide</button>
     <button onclick="squareRoot()">Square Root</button>
+    <button onclick="modulus()">Modulus</button>
     <h3>Result: <span id="result">0</span></h3>
 
     <script>
@@ -79,6 +80,15 @@
                 document.getElementById("result").innerText = a / b;
             }
         }
+        function modulus() {
+    let [a, b] = getValues();
+
+    if (b === 0) {
+        document.getElementById("result").innerText = "Cannot mod by zero";
+    } else {
+        document.getElementById("result").innerText = a % b;
+    }
+}
 
         function squareRoot() {
             let a = parseFloat(document.getElementById("num1").value);
